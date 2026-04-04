@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,7 +48,6 @@ button {
 <input type="password" id="password" placeholder="Password (min 8)">
 
 <button onclick="register()">Create</button>
-
 </div>
 
 <script>
@@ -73,6 +73,28 @@ function register() {
   window.location.href = "index.html";
 }
 </script>
+<script>
+function register(){
 
+  var number = document.querySelector('input[type="text"]').value;
+  var pass = document.querySelector('input[type="password"]').value;
+
+  if(number.length != 11){
+    alert("Number must be 11 digit");
+    return;
+  }
+
+  if(pass.length < 8){
+    alert("Password must be 8+");
+    return;
+  }
+
+  localStorage.setItem("user_number", number);
+  localStorage.setItem("user_pass", pass);
+
+  alert("Account Created!");
+  window.location.href = "index.html";
+}
+</script>
 </body>
 </html>
