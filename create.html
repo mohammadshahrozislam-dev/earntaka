@@ -2,9 +2,10 @@
 <html>
 <head>
 <title>Create Account</title>
+
 <style>
 body {
-  background: #3b5998;
+  background: linear-gradient(135deg, #667eea, #764ba2);
   font-family: Arial;
 }
 
@@ -12,24 +13,29 @@ body {
   width: 300px;
   margin: 100px auto;
   background: white;
-  padding: 20px;
+  padding: 25px;
   text-align: center;
+  border-radius: 15px;
 }
 
 input {
   width: 90%;
-  padding: 10px;
-  margin: 5px;
+  padding: 12px;
+  margin: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
 button {
   width: 95%;
-  padding: 10px;
+  padding: 12px;
   background: green;
   color: white;
   border: none;
+  border-radius: 8px;
 }
 </style>
+
 </head>
 
 <body>
@@ -37,12 +43,36 @@ button {
 <div class="box">
 <h2>Create Account</h2>
 
-<input type="text" placeholder="Mobile Number">
-<input type="password" placeholder="Password">
+<input type="text" id="number" placeholder="Mobile Number (11 digit)">
+<input type="password" id="password" placeholder="Password (min 8)">
 
-<button>Create</button>
+<button onclick="register()">Create</button>
 
 </div>
+
+<script>
+function register() {
+  var number = document.getElementById("number").value;
+  var pass = document.getElementById("password").value;
+
+  if(number.length != 11) {
+    alert("Number must be 11 digit");
+    return;
+  }
+
+  if(pass.length < 8) {
+    alert("Password must be at least 8 characters");
+    return;
+  }
+
+  localStorage.setItem("number", number);
+  localStorage.setItem("password", pass);
+
+  alert("Account created সফল!");
+
+  window.location.href = "index.html";
+}
+</script>
 
 </body>
 </html>
