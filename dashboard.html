@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Pro Trading</title>
+<title>Pro Trading Dashboard</title>
+
+<script src="https://s3.tradingview.com/tv.js"></script>
 
 <style>
 body {
@@ -14,18 +16,23 @@ body {
 
 /* SIDEBAR */
 .sidebar {
-  width: 200px;
+  width: 220px;
   background: #161a1e;
-  padding: 15px;
+  padding: 10px;
 }
 
 .sidebar h3 {
   color: #f0b90b;
+  text-align: center;
 }
 
-.sidebar p {
-  margin: 10px 0;
+.company {
+  font-size: 12px;
+  margin: 5px 0;
 }
+
+.green { color: #00ff88; }
+.red { color: red; }
 
 /* MAIN */
 .main {
@@ -37,55 +44,45 @@ body {
 .header {
   text-align: center;
   color: #f0b90b;
+  margin-bottom: 10px;
 }
 
 /* CARDS */
 .cards {
   display: flex;
+  justify-content: center;
 }
 
 .card {
   background: #161a1e;
   margin: 10px;
   padding: 15px;
-  width: 150px;
+  width: 160px;
   text-align: center;
   border-radius: 10px;
 }
 
-.up { color: #00ff88; }
-.down { color: red; }
-
-/* GRAPH */
-#graph {
-  width: 100%;
-  height: 250px;
-}
-
-/* ORDER BOOK */
-.orderbook {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.buy, .sell {
-  width: 48%;
-  background: #161a1e;
-  padding: 10px;
-}
-
-.buy p { color: #00ff88; }
-.sell p { color: red; }
-
-/* BUTTON */
 button {
-  margin-top: 5px;
+  margin-top: 10px;
   padding: 8px;
   width: 100%;
   background: #f0b90b;
   border: none;
 }
+
+/* ORDER BOOK */
+.orderbook {
+  display: flex;
+  margin-top: 10px;
+}
+
+.buy, .sell {
+  width: 50%;
+  padding: 10px;
+}
+
+.buy p { color: #00ff88; }
+.sell p { color: red; }
 </style>
 
 </head>
@@ -94,62 +91,73 @@ button {
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-<h3>📊 Binance UI</h3>
-<p>Dashboard</p>
-<p>Markets</p>
-<p>Wallet</p>
-<p>History</p>
+<h3>📊 Market Data</h3>
+
+<div id="companies"></div>
+
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
-<div class="header">🔥 LIVE MARKET 🔥</div>
+<div class="header">🔥 LIVE TRADING 🔥</div>
 
 <div class="cards">
 
 <div class="card">
 ELITE
 <p id="p1">$3.00</p>
-<p id="s1" class="up">UP</p>
+<p id="s1" class="green">UP</p>
 <button onclick="pay()">Buy</button>
 </div>
 
 <div class="card">
 PREMIUM
 <p id="p2">$2.00</p>
-<p id="s2" class="up">UP</p>
+<p id="s2" class="green">UP</p>
 <button onclick="pay()">Buy</button>
 </div>
 
 <div class="card">
 BASIC
 <p id="p3">$1.00</p>
-<p id="s3" class="up">UP</p>
+<p id="s3" class="green">UP</p>
 <button onclick="pay()">Buy</button>
 </div>
 
 </div>
 
-<canvas id="graph"></canvas>
+<!-- CANDLE CHART -->
+<div id="chart" style="height:400px;"></div>
 
+<!-- ORDER BOOK -->
 <div class="orderbook">
-
 <div class="buy" id="buy"></div>
 <div class="sell" id="sell"></div>
-
 </div>
 
 </div>
 
 <script>
+
+/* TRADING VIEW */
+new TradingView.widget({
+  "width": "100%",
+  "height": 400,
+  "symbol": "BINANCE:BTCUSDT",
+  "interval": "1",
+  "theme": "dark",
+  "style": "1",
+  "container_id": "chart"
+});
+
+/* PRICE CONTROL */
 var prices = [3,2,1];
 var min = [2.90,1.95,1.00];
 var max = [3.22,2.12,1.32];
 
 function updatePrices() {
-  for(let i=0;i<3;i++) {
-
+  for(let i=0;i<3;i++){
     let change = (Math.random()*0.15 - 0.10);
     prices[i] += change;
 
@@ -163,23 +171,20 @@ function updatePrices() {
 
     if(change > 0){
       s.innerText = "▲ UP";
-      s.className = "up";
+      s.className = "green";
     } else {
       s.innerText = "▼ DOWN";
-      s.className = "down";
+      s.className = "red";
     }
   }
-
-  updateOrderBook();
 }
 
 /* ORDER BOOK */
-function updateOrderBook() {
-
+function updateOrderBook(){
   let buyHTML = "<h4>BUY</h4>";
   let sellHTML = "<h4>SELL</h4>";
 
-  for(let i=0;i<5;i++) {
+  for(let i=0;i<12;i++){
     buyHTML += "<p>$"+(Math.random()*3).toFixed(2)+"</p>";
     sellHTML += "<p>$"+(Math.random()*3).toFixed(2)+"</p>";
   }
@@ -188,30 +193,20 @@ function updateOrderBook() {
   document.getElementById("sell").innerHTML = sellHTML;
 }
 
-/* GRAPH */
-var canvas = document.getElementById("graph");
-var ctx = canvas.getContext("2d");
+/* COMPANIES */
+function updateCompanies(){
+  let names = ["Binance","Bybit","KuCoin","OKX","Gate","Bitget","Huobi","Coinbase","Kraken","Bitfinex","MEXC","Deribit"];
+  let html = "";
 
-canvas.width = window.innerWidth;
-canvas.height = 250;
+  for(let i=0;i<names.length;i++){
+    let up = Math.random()>0.5;
+    let val = (Math.random()*10).toFixed(2);
 
-var data = [];
-for(let i=0;i<100;i++) data.push(150);
-
-function drawGraph() {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-
-  ctx.beginPath();
-  ctx.strokeStyle = "#f0b90b";
-
-  for(let i=0;i<data.length;i++) {
-    ctx.lineTo(i*10, data[i]);
+    html += "<div class='company "+(up?"green":"red")+"'>"
+    + names[i] + " : " + (up?"+":"-") + val + "%</div>";
   }
 
-  ctx.stroke();
-
-  data.shift();
-  data.push(data[data.length-1] + (Math.random()*10-5));
+  document.getElementById("companies").innerHTML = html;
 }
 
 /* BKASH */
@@ -221,8 +216,10 @@ function pay(){
 
 setInterval(function(){
   updatePrices();
-  drawGraph();
+  updateOrderBook();
+  updateCompanies();
 },1000);
+
 </script>
 
 </body>
