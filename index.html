@@ -1,41 +1,75 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Islamic Tools Hub</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+<title>Login</title>
 </head>
 <body>
 
-  <header class="header">
-    <h1>Islamic Tools Hub</h1>
-    <p>একদম হালাল ইসলামিক টুলস ও সার্ভিস প্ল্যাটফর্ম</p>
-  </header>
+<h2>Login / Register</h2>
 
-  <main class="container">
-    <div class="card">
-      <h2>Salah Time Calculator</h2>
-      <p>তোমার এলাকার অনুযায়ী সালাতের সময় বের করো</p>
-      <button class="btn">আরও দেখুন</button>
-    </div>
+<input id="phone" placeholder="Phone"><br><br>
+<input id="password" placeholder="Password"><br><br>
 
-    <div class="card">
-      <h2>Qibla Direction Tool</h2>
-      <p>তোমার অবস্থান থেকে কিবলা দিক জানো</p>
-      <button class="btn">আরও দেখুন</button>
-    </div>
+<button onclick="register()">Register</button>
+<button onclick="login()">Login</button>
 
-    <div class="card">
-      <h2>Islamic Dua Generator</h2>
-      <p>রোজ ব্যবহারের জন্য ইসলামিক দোয়া সিলেক্ট করো</p>
-      <button class="btn">আরও দেখুন</button>
-    </div>
-  </main>
+<script type="module">
 
-  <footer class="footer">
-    <p>© 2026 Islamic Tools Hub — সব ইনকাম হালালভাবে পরিচালিত</p>
-  </footer>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCfl7V_-yp5HvfUd00h-RTdNmvXNu7I37o",
+  authDomain: "project-one-5c61e.firebaseapp.com",
+  projectId: "project-one-5c61e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+
+// REGISTER
+window.register = async function() {
+  let phone = document.getElementById("phone").value;
+  let password = document.getElementById("password").value;
+
+  await addDoc(collection(db, "users"), {
+    phone: phone,
+    password: password,
+    balance: 0
+  });
+
+  alert("Account Created ✅");
+};
+
+
+// LOGIN
+window.login = async function() {
+  let phone = document.getElementById("phone").value;
+  let password = document.getElementById("password").value;
+
+  const q = query(
+    collection(db, "users"),
+    where("phone", "==", phone),
+    where("password", "==", password)
+  );
+
+  const snap = await getDocs(q);
+
+  if(snap.empty){
+    alert("Wrong ❌");
+  } else {
+    alert("Login Success ✅");
+
+    snap.forEach(doc=>{
+      localStorage.setItem("userPhone", doc.data().phone);
+    });
+
+    window.location.href = "dashboard.html";
+  }
+};
+
+</script>
 
 </body>
 </html>
