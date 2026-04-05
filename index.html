@@ -1,200 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Login</title>
-
-<style>
-body {
-  margin: 0;
-  font-family: Arial;
-  height: 100vh;
-  display: flex;
-  background: linear-gradient(-45deg,#0f2027,#203a43,#2c5364,#1c1c1c);
-  background-size: 400% 400%;
-  animation: bgMove 10s infinite alternate;
-  color: white;
-}
-
-@keyframes bgMove {
-  0% { background-position: left; }
-  100% { background-position: right; }
-}
-
-/* LEFT SIDE */
-.left {
-  width: 60%;
-  padding: 50px;
-}
-
-/* TITLE */
-.left h1 {
-  font-size: 42px;
-  color: #00ffc3;
-  text-shadow: 0 0 15px #00ffc3;
-}
-
-/* TEXT */
-.left p {
-  color: #ccc;
-  margin-top: 10px;
-}
-
-/* LIVE STATS */
-.stats {
-  margin-top: 30px;
-}
-
-.stat {
-  margin: 10px 0;
-  font-size: 18px;
-}
-
-/* MARKET BOX */
-.market {
-  margin-top: 30px;
-  background: rgba(255,255,255,0.08);
-  padding: 20px;
-  border-radius: 10px;
-}
-
-.market p {
-  margin: 8px;
-}
-
-/* RIGHT SIDE */
-.right {
-  width: 40%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* LOGIN BOX */
-.box {
-  background: rgba(255,255,255,0.1);
-  padding: 30px;
-  width: 320px;
-  border-radius: 15px;
-  backdrop-filter: blur(15px);
-  text-align: center;
-  box-shadow: 0 0 30px rgba(0,255,200,0.4);
-}
-
-/* INPUT */
-input {
-  width: 90%;
-  padding: 12px;
-  margin: 10px;
-  border-radius: 8px;
-  border: none;
-}
-
-/* BUTTON */
-button {
-  width: 95%;
-  padding: 12px;
-  background: linear-gradient(45deg,#00c6ff,#0072ff);
-  border: none;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-button:hover {
-  transform: scale(1.05);
-}
-
-/* LINKS */
-a {
-  display: block;
-  margin-top: 10px;
-  color: #00ffc3;
-}
-</style>
-
+  <title>Islamic Hub</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
 
-<!-- LEFT SIDE -->
-<div class="left">
+<header>
+  <h1>🕌 Islamic Knowledge & Tools</h1>
+  <p>Deen + Dunia in One Platform</p>
+</header>
 
-<h1>🚀 Smart Trading Platform</h1>
-<p>Trade smarter. Earn faster. Professional crypto system.</p>
+<nav>
+  <a href="dua.html">Dua</a>
+  <a href="quran.html">Quran</a>
+  <a href="blog.html">Blog</a>
+  <a href="tools.html">Tools</a>
+  <a href="donate.html">Donate</a>
+</nav>
 
-<div class="stats">
-<div class="stat" id="users">👥 Users: 1200</div>
-<div class="stat" id="profit">💰 Profit: $5000</div>
-<div class="stat" id="trades">📊 Trades: 320</div>
+<div class="container">
+
+<div class="card">
+  <h2>📿 Daily Dua</h2>
+  <p>Start your day with authentic duas</p>
 </div>
 
-<div class="market">
-<h3>📊 Live Market</h3>
-<p id="btc">BTC: $30000</p>
-<p id="eth">ETH: $2000</p>
-<p id="bnb">BNB: $300</p>
+<div class="card">
+  <h2>📖 Quran & Tafsir</h2>
+  <p>Read Quran with meaning</p>
+</div>
+
+<div class="card">
+  <h2>🧮 Islamic Tools</h2>
+  <p>Zakat, Tasbih, CGPA & more</p>
 </div>
 
 </div>
-
-<!-- RIGHT SIDE -->
-<div class="right">
-<div class="box">
-
-<h2 style="color:#00ffc3;">🔐 Secure Login</h2>
-
-<input type="text" id="number" placeholder="Mobile Number">
-<input type="password" id="password" placeholder="Password">
-
-<button onclick="login()">Login</button>
-
-<a href="create.html">Create Account</a>
-<a href="otp.html">Forgot Password?</a>
-
-</div>
-</div>
-
-<script>
-// LOGIN
-function login(){
-
-  var number = document.querySelector('input[type="text"]').value;
-  var pass = document.querySelector('input[type="password"]').value;
-
-  var savedNumber = localStorage.getItem("user_number");
-  var savedPass = localStorage.getItem("user_pass");
-
-  if(number === savedNumber && pass === savedPass){
-    window.location.href = "dashboard.html";
-  } else {
-    alert("Wrong Number or Password");
-  }
-
-}
-// LIVE DATA
-setInterval(function(){
-
-  document.getElementById("users").innerText =
-    "👥 Users: " + Math.floor(Math.random()*5000);
-
-  document.getElementById("profit").innerText =
-    "💰 Profit: $" + Math.floor(Math.random()*10000);
-
-  document.getElementById("trades").innerText =
-    "📊 Trades: " + Math.floor(Math.random()*1000);
-
-  document.getElementById("btc").innerText =
-    "BTC: $" + (30000 + Math.floor(Math.random()*1000));
-
-  document.getElementById("eth").innerText =
-    "ETH: $" + (2000 + Math.floor(Math.random()*200));
-
-  document.getElementById("bnb").innerText =
-    "BNB: $" + (300 + Math.floor(Math.random()*50));
-
-},2000);
-</script>
 
 </body>
 </html>
