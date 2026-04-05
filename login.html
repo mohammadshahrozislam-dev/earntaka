@@ -1,50 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Login</title>
+  <title>Login</title>
 </head>
+
 <body>
 
-<h2>Login / Register</h2>
+<h2>Login</h2>
 
-<input id="phone" placeholder="Phone"><br><br>
-<input id="password" placeholder="Password"><br><br>
+<input type="text" id="phone" placeholder="Phone"><br><br>
+<input type="password" id="password" placeholder="Password"><br><br>
 
-<button onclick="register()">Register</button>
 <button onclick="login()">Login</button>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// তোমার config
 const firebaseConfig = {
   apiKey: "AIzaSyCfl7V_-yp5HvfUd00h-RTdNmvXNu7I37o",
   authDomain: "project-one-5c61e.firebaseapp.com",
-  projectId: "project-one-5c61e"
+  projectId: "project-one-5c61e",
+  storageBucket: "project-one-5c61e.appspot.com",
+  messagingSenderId: "529608401459",
+  appId: "1:529608401459:web:d478bf2d0aabe285c87946"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-
-// REGISTER
-window.register = async function() {
-  let phone = document.getElementById("phone").value;
-  let password = document.getElementById("password").value;
-
-  await addDoc(collection(db, "users"), {
-    phone: phone,
-    password: password,
-    balance: 0
-  });
-
-  alert("Account Created ✅");
-};
-
-
-// LOGIN
 window.login = async function() {
+
   let phone = document.getElementById("phone").value;
   let password = document.getElementById("password").value;
 
@@ -54,20 +42,18 @@ window.login = async function() {
     where("password", "==", password)
   );
 
-  const snap = await getDocs(q);
+  const querySnapshot = await getDocs(q);
 
-  if(snap.empty){
-    alert("Wrong ❌");
+  if(querySnapshot.empty){
+    alert("Wrong login!");
   } else {
-    alert("Login Success ✅");
+    alert("Login success");
 
-    snap.forEach(doc=>{
-      localStorage.setItem("userPhone", doc.data().phone);
-    });
+    localStorage.setItem("userPhone", phone);
 
     window.location.href = "dashboard.html";
   }
-};
+}
 
 </script>
 
