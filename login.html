@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+</head>
+<body>
+
+<h2>Login / Register</h2>
+
+<input id="phone" placeholder="Phone"><br><br>
+<input id="password" placeholder="Password"><br><br>
+
+<button onclick="register()">Register</button>
+<button onclick="login()">Login</button>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCfl7V_-yp5HvfUd00h-RTdNmvXNu7I37o",
+  authDomain: "project-one-5c61e.firebaseapp.com",
+  projectId: "project-one-5c61e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+
+// REGISTER
+window.register = async function() {
+  let phone = document.getElementById("phone").value;
+  let password = document.getElementById("password").value;
+
+  await addDoc(collection(db, "users"), {
+    phone: phone,
+    password: password,
+    balance: 0
+  });
+
+  alert("Account Created ✅");
+};
+
+
+// LOGIN
+window.login = async function() {
+  let phone = document.getElementById("phone").value;
+  let password = document.getElementById("password").value;
+
+  const q = query(
+    collection(db, "users"),
+    where("phone", "==", phone),
+    where("password", "==", password)
+  );
+
+  const snap = await getDocs(q);
+
+  if(snap.empty){
+    alert("Wrong ❌");
+  } else {
+    alert("Login Success ✅");
+
+    snap.forEach(doc=>{
+      localStorage.setItem("userPhone", doc.data().phone);
+    });
+
+    window.location.href = "dashboard.html";
+  }
+};
+
+</script>
+
+</body>
+</html>
